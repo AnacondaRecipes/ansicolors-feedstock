@@ -6,35 +6,46 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/ansicolors-{{ version }}.zip
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.zip
   sha256: 99f94f5e3348a0bcd43c82e5fc4414013ccc19d70bd939ad71e0133ce9c372e0
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  skip: true # [py<36]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
 requirements:
   host:
     - pip
-    - python >=3.6
+    - python
+    - setuptools
   run:
-    - python >=3.6
+    - python
 
 test:
+  source_files:
+    - test
+    - pytest.ini
   imports:
     - colors
   commands:
     - pip check
+    - pytest test
   requires:
     - pip
+    - pytest
 
 about:
-  home: https://github.com/jonathaneunice/colors/
+  home: https://github.com/jonathaneunice/colors
   summary: ANSI colors for Python
   license: BSD-3-Clause
-  license_file:
-    - LICENSE
+  license_family: BSD
+  license_file: LICENSE
+  description: |
+    Add ANSI colors and decorations to your strings.
+    The strings returned by color will have embedded ANSI code sequences stipulating text colors and styles.
+  doc_url: https://github.com/jonathaneunice/colors
+  dev_url: https://github.com/jonathaneunice/colors/blob/master/README.rst
 
 extra:
   recipe-maintainers:
